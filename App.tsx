@@ -30,19 +30,33 @@ export default function App() {
     },
   });
 
+  const [apiUrl, setApiUrl] = useState('');
+
+  const buildApiUrl = dataType => {
+    const baseUrl =
+      'https://y-plants-api.bravedesert-7b0b5672.westus2.azurecontainerapps.io/plant/generation/test-2023';
+    let url = '';
+
+    if (dataType === 'Hora') {
+      url = `${baseUrl}?dataType=hourly`;
+    } else if (dataType === 'Dia') {
+      url = `${baseUrl}?dataType=daily`;
+    } else if (dataType === 'Mês') {
+      url = `${baseUrl}?dataType=monthly`;
+    } else if (dataType === 'Ano') {
+      url = `${baseUrl}?dataType=yearly`;
+    }
+
+    return url;
+  };
+
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        'https://y-plants-api.bravedesert-7b0b5672.westus2.azurecontainerapps.io/plant/generation/test-2023',
-        {
-          headers: {
-            Authorization: 'Bearer HeDKyixt_yMhR4TOvL4HNktaOxga-mgLkUcF',
-          },
-          params: {
-            dataType: 'hourly',
-          },
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: 'Bearer HeDKyixt_yMhR4TOvL4HNktaOxga-mgLkUcF',
         },
-      );
+      });
 
       const {data: responseData} = response;
       setData(responseData.data);
@@ -56,6 +70,14 @@ export default function App() {
       fetchData();
     }
   }, [showGraphics]);
+
+  useEffect(() => {
+    fetchData();
+  }, [apiUrl]);
+
+  useEffect(() => {
+    setApiUrl(buildApiUrl(filter));
+  }, [filter]);
 
   return (
     <SafeAreaView style={styles.backgroundContainer}>
@@ -90,7 +112,11 @@ export default function App() {
                 <Picker
                   style={styles.pickerComponente}
                   selectedValue={filter}
-                  onValueChange={itemValue => setFilter(itemValue)}>
+                  onValueChange={itemValue => {
+                    const selectedOption = options[itemValue - 1];
+                    setFilter(itemValue);
+                    setApiUrl(buildApiUrl(selectedOption));
+                  }}>
                   <Picker.Item key={1} value={1} label={options[0]} />
                   <Picker.Item key={2} value={2} label={options[1]} />
                   <Picker.Item key={3} value={3} label={options[2]} />
@@ -100,18 +126,16 @@ export default function App() {
                   onPress={() => {
                     if (showGraphics === false) {
                       setShowGraphics(true);
-                      fetchData();
                     } else {
                       setShowGraphics(false);
                     }
                   }}>
-                  <Text>Buscar</Text>
+                  <Text>Mostrar</Text>
                 </TouchableOpacity>
               </View>
             </View>
             {showGraphics && (
               <View style={styles.status2}>
-                <Text>Graphics</Text>
                 <VictoryChart domainPadding={{x: 20}}>
                   <VictoryBar
                     style={{
