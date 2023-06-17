@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,18 +10,41 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {VictoryBar, VictoryChart} from 'victory-native';
+import axios from 'axios';
 
 export default function App() {
-  //const optionsTranslate = ['hourly', 'daily', 'monthly', 'yearly'];
   const options = ['Hora', 'Dia', 'Mês', 'Ano'];
   const [filter, setFilter] = useState('');
   const [showGraphics, setShowGraphics] = useState(false);
 
   const [data, setData] = useState([]);
 
-  /*useEffect(() => {
-    setData(dataMockup);
-  }, [filter]);*/
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        'https://y-plants-api.bravedesert-7b0b5672.westus2.azurecontainerapps.io/plant/generation/test-2023',
+        {
+          headers: {
+            Authorization: 'Bearer HeDKyixt_yMhR4TOvL4HNktaOxga-mgLkUcF',
+          },
+          params: {
+            dataType: 'hourly',
+          },
+        },
+      );
+
+      const data = response.data;
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (showGraphics) {
+      fetchData();
+    }
+  }, [showGraphics]);
 
   return (
     <SafeAreaView style={styles.backgroundContainer}>
@@ -66,6 +89,7 @@ export default function App() {
                   onPress={() => {
                     if (showGraphics === false) {
                       setShowGraphics(true);
+                      fetchData();
                     } else {
                       setShowGraphics(false);
                     }
@@ -85,13 +109,16 @@ export default function App() {
                     data={[
                       {x: 1, y: 1},
                       {x: 2, y: 2},
-                      {x: 3, y: 2},
+                      {x: 3, y: 3},
+                      {x: 4, y: 4},
                     ]}
                   />
                 </VictoryChart>
               </View>
             )}
           </View>
+          <Text>Dados da API:</Text>
+          <Text>{JSON.stringify(data)}</Text>
         </View>
       </ImageBackground>
     </SafeAreaView>
