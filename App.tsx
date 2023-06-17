@@ -17,7 +17,18 @@ export default function App() {
   const [filter, setFilter] = useState('');
   const [showGraphics, setShowGraphics] = useState(false);
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    data_type: '',
+    x_labels: [],
+    generation: [],
+    expected: [],
+    totals: {
+      kwh: 0,
+      percentage: 0,
+      trees: 0,
+      co2: 0,
+    },
+  });
 
   const fetchData = async () => {
     try {
@@ -33,8 +44,8 @@ export default function App() {
         },
       );
 
-      const data = response.data;
-      setData(data);
+      const {data: responseData} = response;
+      setData(responseData.data);
     } catch (error) {
       console.error(error);
     }
@@ -106,19 +117,15 @@ export default function App() {
                     style={{
                       data: {fill: '#c43a31'},
                     }}
-                    data={[
-                      {x: 1, y: 1},
-                      {x: 2, y: 2},
-                      {x: 3, y: 3},
-                      {x: 4, y: 4},
-                    ]}
+                    data={data.x_labels.map((x_label, index) => ({
+                      x: x_label,
+                      y: data.generation[index],
+                    }))}
                   />
                 </VictoryChart>
               </View>
             )}
           </View>
-          <Text>Dados da API:</Text>
-          <Text>{JSON.stringify(data)}</Text>
         </View>
       </ImageBackground>
     </SafeAreaView>
