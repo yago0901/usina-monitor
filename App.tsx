@@ -9,41 +9,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-
-const dataMockup = {
-  data: {
-    data_type: 'hourly',
-    x_labels: [
-      '05:00:00',
-      '06:00:00',
-      '07:00:00',
-      '08:00:00',
-      '09:00:00',
-      '10:00:00',
-      '11:00:00',
-      '12:00:00',
-      '13:00:00',
-      '14:00:00',
-      '15:00:00',
-      '16:00:00',
-      '17:00:00',
-    ],
-    generation: [0, 0, 0, 0.4, 4.9, 9.3, 12.5, 13.5, 13.8, 12.0, 1.5, 1.9, 2.2],
-    expected: [113.325],
-    totals: {
-      kwh: 72.0,
-      percentage: 63.53,
-      trees: 0.04,
-      co2: 8.96,
-    },
-  },
-};
+import {VictoryBar, VictoryChart} from 'victory-native';
 
 export default function App() {
   //const optionsTranslate = ['hourly', 'daily', 'monthly', 'yearly'];
   const options = ['Hora', 'Dia', 'Mês', 'Ano'];
   const [filter, setFilter] = useState('');
   const [showGraphics, setShowGraphics] = useState(false);
+
+  const [data, setData] = useState([]);
+
+  /*useEffect(() => {
+    setData(dataMockup);
+  }, [filter]);*/
 
   return (
     <SafeAreaView style={styles.backgroundContainer}>
@@ -97,8 +75,20 @@ export default function App() {
               </View>
             </View>
             {showGraphics && (
-              <View>
+              <View style={styles.status2}>
                 <Text>Graphics</Text>
+                <VictoryChart domainPadding={{x: 20}}>
+                  <VictoryBar
+                    style={{
+                      data: {fill: '#c43a31'},
+                    }}
+                    data={[
+                      {x: 1, y: 1},
+                      {x: 2, y: 2},
+                      {x: 3, y: 2},
+                    ]}
+                  />
+                </VictoryChart>
               </View>
             )}
           </View>
@@ -167,5 +157,11 @@ const styles = StyleSheet.create({
   },
   pickerComponente: {
     width: 150,
+  },
+  status2: {
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
   },
 });
