@@ -9,13 +9,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import {VictoryBar, VictoryChart} from 'victory-native';
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryAxis,
+} from 'victory-native';
 import axios from 'axios';
+import {format} from 'date-fns';
+import {ptBR} from 'date-fns/locale';
 
 export default function App() {
   const options = ['Hora', 'Dia', 'Mês', 'Ano'];
   const [filter, setFilter] = useState('');
   const [showGraphics, setShowGraphics] = useState(false);
+  const [xLabelFormat, setXLabelFormat] = useState('');
 
   const [data, setData] = useState({
     data_type: '',
@@ -32,19 +40,23 @@ export default function App() {
 
   const [apiUrl, setApiUrl] = useState('');
 
-  const buildApiUrl = dataType => {
+  const buildApiUrl = (dataType: string) => {
     const baseUrl =
       'https://y-plants-api.bravedesert-7b0b5672.westus2.azurecontainerapps.io/plant/generation/test-2023';
     let url = '';
 
     if (dataType === 'Hora') {
       url = `${baseUrl}?dataType=hourly`;
+      setXLabelFormat('HH:mm');
     } else if (dataType === 'Dia') {
       url = `${baseUrl}?dataType=daily`;
+      setXLabelFormat('dd');
     } else if (dataType === 'Mês') {
       url = `${baseUrl}?dataType=monthly`;
+      setXLabelFormat('MMM');
     } else if (dataType === 'Ano') {
       url = `${baseUrl}?dataType=yearly`;
+      setXLabelFormat('yyyy');
     }
 
     return url;
@@ -59,12 +71,41 @@ export default function App() {
       });
 
       const {data: responseData} = response;
-      setData(responseData.data);
+      const {data_type, x_labels, generation} = responseData.data;
+
+      let formattedXLabels: never[] = [];
+      if (data_type === 'hourly') {
+        formattedXLabels = x_labels.map(
+          (x_label: any) =>
+            format(new Date(`2023-01-01T${x_label}`), xLabelFormat),
+          {
+            locale: ptBR,
+          },
+        );
+      } else if (data_type === 'daily') {
+        formattedXLabels = x_labels.map((x_label: any) =>
+          format(new Date(x_label), xLabelFormat, {locale: ptBR}),
+        );
+      } else if (data_type === 'monthly') {
+        formattedXLabels = x_labels.map((x_label: any) =>
+          format(new Date(x_label), xLabelFormat, {locale: ptBR}),
+        );
+      } else if (data_type === 'yearly') {
+        formattedXLabels = x_labels.map((x_label: any) =>
+          format(new Date(x_label), xLabelFormat, {locale: ptBR}),
+        );
+      }
+
+      setData(prevData => ({
+        ...prevData,
+        data_type,
+        x_labels: formattedXLabels,
+        generation,
+      }));
     } catch (error) {
       console.error(error);
     }
   };
-
   useEffect(() => {
     if (showGraphics) {
       fetchData();
@@ -136,7 +177,23 @@ export default function App() {
             </View>
             {showGraphics && (
               <View style={styles.status2}>
-                <VictoryChart domainPadding={{x: 20}}>
+                <VictoryChart
+                  theme={VictoryTheme.material}
+                  domainPadding={{x: [15, 15], y: 5}}
+                  width={375}
+                  height={200}>
+                  <VictoryAxis
+                    style={{
+                      tickLabels: {
+                        fontSize: 7.5,
+                      },
+                    }}
+                  />
+                  <VictoryAxis
+                    dependentAxis
+                    orientation="left"
+                    style={{tickLabels: {fontSize: 15}}}
+                  />
                   <VictoryBar
                     style={{
                       data: {fill: '#c43a31'},
@@ -220,6 +277,5 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100,
   },
 });
