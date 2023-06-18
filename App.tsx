@@ -101,20 +101,17 @@ export default function App() {
         data_type,
         x_labels: formattedXLabels,
         generation,
+        totals: responseData.data.totals,
       }));
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    if (showGraphics) {
+    if (apiUrl) {
       fetchData();
     }
-  }, [showGraphics]);
-
-  useEffect(() => {
-    fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, filter]);
 
   useEffect(() => {
     setApiUrl(buildApiUrl(filter));
@@ -158,6 +155,13 @@ export default function App() {
                     setFilter(itemValue);
                     setApiUrl(buildApiUrl(selectedOption));
                   }}>
+                  <Picker.Item
+                    key={0}
+                    value={null}
+                    label="Selecione"
+                    enabled={false}
+                  />
+
                   <Picker.Item key={1} value={1} label={options[0]} />
                   <Picker.Item key={2} value={2} label={options[1]} />
                   <Picker.Item key={3} value={3} label={options[2]} />
@@ -165,13 +169,10 @@ export default function App() {
                 </Picker>
                 <TouchableOpacity
                   onPress={() => {
-                    if (showGraphics === false) {
-                      setShowGraphics(true);
-                    } else {
-                      setShowGraphics(false);
-                    }
+                    setShowGraphics(!showGraphics);
+                    console.log('showGraphics:', showGraphics);
                   }}>
-                  <Text>Mostrar</Text>
+                  <Text>{showGraphics ? 'Fechar' : 'Mostrar'}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -204,6 +205,11 @@ export default function App() {
                     }))}
                   />
                 </VictoryChart>
+                <View>
+                  <Text>Total de energia gerada = {data.totals?.kwh}kWh</Text>
+                  <Text>Carbono evitado = {data.totals?.co2}kg</Text>
+                  <Text>Árvores salvas = {data.totals?.trees}</Text>
+                </View>
               </View>
             )}
           </View>
@@ -275,7 +281,6 @@ const styles = StyleSheet.create({
   },
   status2: {
     height: 100,
-    justifyContent: 'center',
     alignItems: 'center',
   },
 });
