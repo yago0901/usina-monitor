@@ -147,30 +147,31 @@ export default function App() {
             <View style={styles.status}>
               <Text style={styles.graphicTitle}>Gráfico</Text>
               <View style={styles.pickerContainer}>
-                <Picker
-                  style={styles.pickerComponente}
-                  selectedValue={filter}
-                  onValueChange={itemValue => {
-                    const selectedOption = options[itemValue - 1];
-                    setFilter(itemValue);
-                    setApiUrl(buildApiUrl(selectedOption));
-                  }}>
-                  <Picker.Item
-                    key={0}
-                    value={null}
-                    label="Selecione"
-                    enabled={false}
-                  />
+                <View>
+                  <Picker
+                    style={styles.pickerComponente}
+                    selectedValue={filter}
+                    onValueChange={itemValue => {
+                      const selectedOption = options[itemValue - 1];
+                      setFilter(itemValue);
+                      setApiUrl(buildApiUrl(selectedOption));
+                    }}>
+                    <Picker.Item
+                      key={0}
+                      value={null}
+                      label="Selecione"
+                      enabled={false}
+                    />
 
-                  <Picker.Item key={1} value={1} label={options[0]} />
-                  <Picker.Item key={2} value={2} label={options[1]} />
-                  <Picker.Item key={3} value={3} label={options[2]} />
-                  <Picker.Item key={4} value={4} label={options[3]} />
-                </Picker>
+                    <Picker.Item key={1} value={1} label={options[0]} />
+                    <Picker.Item key={2} value={2} label={options[1]} />
+                    <Picker.Item key={3} value={3} label={options[2]} />
+                    <Picker.Item key={4} value={4} label={options[3]} />
+                  </Picker>
+                </View>
                 <TouchableOpacity
                   onPress={() => {
                     setShowGraphics(!showGraphics);
-                    console.log('showGraphics:', showGraphics);
                   }}>
                   <Text>{showGraphics ? 'Fechar' : 'Mostrar'}</Text>
                 </TouchableOpacity>
@@ -198,6 +199,10 @@ export default function App() {
                   <VictoryBar
                     style={{
                       data: {fill: '#c43a31'},
+                    }}
+                    animate={{
+                      duration: 2000,
+                      onLoad: {duration: 1000},
                     }}
                     data={data.x_labels.map((x_label, index) => ({
                       x: x_label,
