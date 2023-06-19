@@ -1,8 +1,8 @@
-<h4 align="center"> 
+<h4 > 
 	Usina Monitor
 </h4>
 
-<p align="center">
+<p >
  <a href="#-sobre-o-projeto">Sobre</a> •
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-layout">Layout</a> • 
@@ -14,14 +14,15 @@
 
 ## 💻 Sobre o projeto
 
-Usina Monitor - é um projeto que testa as habilidades de Front-End indo desde design e criação da página até a comunicação com a api.
+Usina Monitor </br>
+É um projeto que testa as habilidades de Front-End indo desde design e criação da página até a comunicação com a api.
 
-Dificuldades:
-1°= Trabalhar com uma nova biblioteca Victory para gráficos.
-2°= Ajuste adequado do layout do gráfico
+Dificuldades:</br>
+1°= Trabalhar com uma nova biblioteca Victory para gráficos.</br>
+2°= Ajuste adequado do layout do gráfico</br>
 
-Dificuldades superadas e mais um projeto concluído, irei atualizando o projeto com o tempo.
-Principais funcionalidades solicitas já efetuadas.
+Dificuldades superadas e mais um projeto concluído, irei atualizando o projeto com o tempo.</br>
+Principais funcionalidades solicitas já efetuadas.</br>
 Projeto com prazo de 5 dias.
 
 ---

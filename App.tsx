@@ -127,7 +127,7 @@ export default function App() {
           <Text style={styles.title}>Usina Monitor</Text>
         </View>
         <View style={styles.body}>
-          <View style={styles.description}>
+          <View>
             <Text style={styles.descriptionTitle}>
               Nome: Usina Solar Yellot
             </Text>
@@ -146,6 +146,9 @@ export default function App() {
           <View>
             <View style={styles.status}>
               <Text style={styles.graphicTitle}>Gráfico</Text>
+              <Text style={styles.graphicSubTitle}>
+                Selecione hora, dia, mês ou ano
+              </Text>
               <View style={styles.pickerContainer}>
                 <View>
                   <Picker
@@ -201,8 +204,8 @@ export default function App() {
                       data: {fill: '#c43a31'},
                     }}
                     animate={{
-                      duration: 2000,
-                      onLoad: {duration: 1000},
+                      duration: 1000,
+                      onLoad: {duration: 500},
                     }}
                     data={data.x_labels.map((x_label, index) => ({
                       x: x_label,
@@ -210,10 +213,16 @@ export default function App() {
                     }))}
                   />
                 </VictoryChart>
-                <View>
-                  <Text>Total de energia gerada = {data.totals?.kwh}kWh</Text>
-                  <Text>Carbono evitado = {data.totals?.co2}kg</Text>
-                  <Text>Árvores salvas = {data.totals?.trees}</Text>
+                <View style={styles.containerDescription}>
+                  <Text style={styles.textDescription}>
+                    Total de energia gerada = {data.totals?.kwh}kWh
+                  </Text>
+                  <Text style={styles.textDescription}>
+                    Carbono evitado = {data.totals?.co2}kg
+                  </Text>
+                  <Text style={styles.textDescription}>
+                    Árvores salvas = {data.totals?.trees}
+                  </Text>
                 </View>
               </View>
             )}
@@ -248,9 +257,6 @@ const styles = StyleSheet.create({
     marginLeft: '15%',
     marginRight: '15%',
   },
-  description: {
-    margin: 8,
-  },
   descriptionTitle: {
     color: '#000000',
     fontSize: 15,
@@ -276,6 +282,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 25,
   },
+  graphicSubTitle: {
+    color: '#000000',
+    fontSize: 15,
+  },
   pickerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -287,5 +297,12 @@ const styles = StyleSheet.create({
   status2: {
     height: 100,
     alignItems: 'center',
+  },
+  containerDescription: {
+    alignItems: 'center',
+  },
+  textDescription: {
+    color: '#000000',
+    fontSize: 15,
   },
 });
