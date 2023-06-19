@@ -28,21 +28,12 @@ Projeto com prazo de 5 dias.
 
 ## ⚙️ Funcionalidades
 
-- [x] Entrada de veículo:
-
-  - [x] Placa
-
-- [x] Saída de veículo:
-
-  - [x] Pagamento
-    - [x] Valor
-    - [x] Horário
-
-- [x] Histórico:
-  - [x] Placa
-  - [x] Tempo total
-  - [x] Pagamento
-  - [x] Tempo atual
+- [x] A minha usina está gerando hoje?
+- [x] Como foi a minha geração em função do tempo, cronologicamente?
+- [x] Dado um filtro temporal (ex.: dia, semana, mês e etc)
+- [x] Qual o total de energia gerada?
+- [x] Qual a quantidade de carbono evitado?
+- [x] Qual a quantidade de árvores salvas?
 
 ---
 
@@ -96,12 +87,9 @@ $ npx react-native run-android
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
-#### **Desenvolvedor React** <br/> 
-([React Native](https://reactnative.dev/) 
-+ [Victory](https://formidable.com/open-source/victory/) 
-+ [Picker](https://reactnative.dev/docs/0.65/picker) 
-+ [date-fns](https://date-fns.org/) )
-+ [Axios](https://github.com/axios/axios)**
+#### **Desenvolvedor React** <br/>
+
+([React Native](https://reactnative.dev/) + [Victory](https://formidable.com/open-source/victory/) + [Picker](https://reactnative.dev/docs/0.65/picker) + [date-fns](https://date-fns.org/) ) + [Axios](https://github.com/axios/axios)
 
 ---
 
